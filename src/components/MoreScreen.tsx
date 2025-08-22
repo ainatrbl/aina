@@ -112,6 +112,14 @@ interface PPMKLeader {
   email?: string
 }
 
+interface UniversityRepresentative {
+  id: string
+  university: string
+  representative: string
+  phone?: string
+  email?: string
+}
+
 const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
   const [activeTab, setActiveTab] = useState('main')
   const [searchQuery, setSearchQuery] = useState('')
@@ -267,6 +275,52 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
       position: 'HONORARY TREASURER',
       phone: '+82-10-5678-9012',
       email: 'treasurer@ppmk.org'
+    }
+  ]
+
+  // University Representatives data
+  const universityRepresentatives: UniversityRepresentative[] = [
+    {
+      id: '1',
+      university: 'KAIST UNIVERSITY',
+      representative: 'ALI BIN ABU',
+      phone: '+82-10-1111-2222',
+      email: 'ali.abu@kaist.ac.kr'
+    },
+    {
+      id: '2',
+      university: 'YONSEI UNIVERSITY',
+      representative: 'ALI BIN ABU',
+      phone: '+82-10-3333-4444',
+      email: 'ali.abu@yonsei.ac.kr'
+    },
+    {
+      id: '3',
+      university: 'KOREA UNIVERSITY',
+      representative: 'ALIA BINTI ABU',
+      phone: '+82-10-5555-6666',
+      email: 'alia.abu@korea.ac.kr'
+    },
+    {
+      id: '4',
+      university: 'HANYANG UNIVERSITY',
+      representative: 'ABU BIN ALI',
+      phone: '+82-10-7777-8888',
+      email: 'abu.ali@hanyang.ac.kr'
+    },
+    {
+      id: '5',
+      university: 'KYUNGHEE UNIVERSITY',
+      representative: 'ALEA BINTI ABU',
+      phone: '+82-10-9999-0000',
+      email: 'alea.abu@khu.ac.kr'
+    },
+    {
+      id: '6',
+      university: 'EWHA UNIVERSITY',
+      representative: 'ALYA BINTI ABU',
+      phone: '+82-10-1111-3333',
+      email: 'alya.abu@ewha.ac.kr'
     }
   ]
 
@@ -1197,6 +1251,58 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
     </div>
   )
 
+  const renderUniversityRepresentatives = () => (
+    <div className="min-h-screen bg-white">
+      <div className="absolute top-6 left-6 z-20">
+        <button 
+          onClick={() => setSelectedOrgCategory(null)}
+          className="w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200"
+        >
+          <ArrowLeft className="w-6 h-6 text-gray-700" />
+        </button>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        {/* Header */}
+        <div className="mb-16">
+          <h1 className="text-4xl font-bold text-black mb-2">
+            Organizations &raquo; University Representatives
+          </h1>
+          <div className="w-full h-px bg-black mt-8"></div>
+        </div>
+
+        {/* University Representatives Grid */}
+        <div className="grid grid-cols-2 gap-6">
+          {universityRepresentatives.map((rep) => (
+            <div key={rep.id} className="bg-gray-300 rounded-lg p-6">
+              <div className="text-center">
+                <h2 className="text-lg font-bold text-black mb-3">{rep.university}</h2>
+                <h3 className="text-base font-medium text-black mb-4">{rep.representative}</h3>
+                <div className="flex justify-center space-x-4">
+                  <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <User className="w-5 h-5 text-white" />
+                  </button>
+                  <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <Phone className="w-5 h-5 text-white" />
+                  </button>
+                  <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <MessageCircle className="w-5 h-5 text-white" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Empty placeholder cards to fill the grid */}
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+        </div>
+      </div>
+    </div>
+  )
+
   const renderOrganizationDetail = (category: OrganizationCategory) => (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="space-y-6">
@@ -1257,6 +1363,10 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
   const renderOrganizations = () => {
     if (selectedOrgCategory === 'ppmk') {
       return renderPPMKLeadership()
+    }
+
+    if (selectedOrgCategory === 'university') {
+      return renderUniversityRepresentatives()
     }
 
     if (selectedOrgCategory) {
@@ -1486,12 +1596,12 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
     }
   }
 
-  // Special case for helpdesk, study materials, and PPMK leadership - render without the standard header/background
-  if (activeTab === 'helpdesk' || activeTab === 'materials' || selectedOrgCategory === 'ppmk') {
+  // Special case for helpdesk, study materials, and organization detail pages - render without the standard header/background
+  if (activeTab === 'helpdesk' || activeTab === 'materials' || selectedOrgCategory === 'ppmk' || selectedOrgCategory === 'university') {
     return (
       <div className="min-h-screen bg-white">
-        {/* Simple back button - only show if not already handled by PPMK component */}
-        {selectedOrgCategory !== 'ppmk' && (
+        {/* Simple back button - only show if not already handled by component */}
+        {selectedOrgCategory !== 'ppmk' && selectedOrgCategory !== 'university' && (
           <div className="absolute top-6 left-6 z-20">
             <button 
               onClick={handleBack}
