@@ -163,44 +163,72 @@ const MainApp: React.FC<MainAppProps> = ({ user }) => {
 
   // Show profile screen if user clicked on profile
   if (showProfile) {
-    return <ProfileScreen user={user} onBack={handleBackFromProfile} />
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+        <ProfileScreen user={user} onBack={handleBackFromProfile} />
+      </div>
+    )
   }
 
   // Show calendar screen if user clicked on calendar
   if (showCalendar) {
-    return <CalendarScreen user={user} onBack={handleBackFromCalendar} />
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+        <CalendarScreen user={user} onBack={handleBackFromCalendar} />
+      </div>
+    )
   }
 
   // Show more screen if user clicked on more
   if (showMore) {
-    return <MoreScreen user={user} onBack={handleBackFromMore} />
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+        <MoreScreen user={user} onBack={handleBackFromMore} />
+      </div>
+    )
   }
 
   // Show channel detail screen if user selected a channel
   if (selectedChannel) {
-    return <ChannelDetailScreen user={user} channelId={selectedChannel} onBack={handleBackFromChannelDetail} />
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+        <ChannelDetailScreen user={user} channelId={selectedChannel} onBack={handleBackFromChannelDetail} />
+      </div>
+    )
   }
 
   // Show channel screen if user clicked on channel
   if (showChannel) {
-    return <ChannelScreen user={user} onBack={handleBackFromChannel} onSelectChannel={handleSelectChannel} />
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+        <ChannelScreen user={user} onBack={handleBackFromChannel} onSelectChannel={handleSelectChannel} />
+      </div>
+    )
   }
 
   // Show chat room screen if user selected a chat room
   if (selectedChatRoom) {
-    return <ChatRoomScreen user={user} roomId={selectedChatRoom} onBack={handleBackFromChatRoom} />
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+        <ChatRoomScreen user={user} roomId={selectedChatRoom} onBack={handleBackFromChatRoom} />
+      </div>
+    )
   }
 
   // Show chat screen if user clicked on chat
   if (showChat) {
-    return <ChatScreen user={user} onBack={handleBackFromChat} onSelectRoom={handleSelectChatRoom} />
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+        <ChatScreen user={user} onBack={handleBackFromChat} onSelectRoom={handleSelectChatRoom} />
+      </div>
+    )
   }
 
   // Default to announcements screen
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 font-inter pb-20">
       {/* Background Pattern */}
-      <div className="fixed inset-0 opacity-30">
+      <div className="fixed inset-0 opacity-30 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-cyan-400/20 to-teal-400/20"></div>
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-300/30 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-300/30 rounded-full blur-3xl"></div>

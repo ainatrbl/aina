@@ -25,17 +25,25 @@ export const useAuth = () => {
 
   useEffect(() => {
     // Check for existing session on mount
-    const savedSession = localStorage.getItem(SESSION_KEY)
-    if (savedSession) {
+    const checkSession = () => {
       try {
-        const userData = JSON.parse(savedSession)
-        setUser(userData)
+        const savedSession = localStorage.getItem(SESSION_KEY)
+        if (savedSession) {
+          const userData = JSON.parse(savedSession)
+          setUser(userData)
+        } else {
+          setUser(null)
+        }
       } catch (error) {
         console.error('Error parsing saved session:', error)
         localStorage.removeItem(SESSION_KEY)
+        setUser(null)
+      } finally {
+        setLoading(false)
       }
     }
-    setLoading(false)
+
+    checkSession()
   }, [])
 
   const saveSession = (userData: AuthUser) => {
