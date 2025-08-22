@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ArrowLeft, Search, Users, Globe, Building2, BookOpen, Wrench, Phone, Mail, MapPin, Star, Clock, ExternalLink, Download, MessageCircle, ChevronRight, Navigation, Filter, Heart, ThumbsUp, Send, FileText, ChevronDown } from 'lucide-react'
+import { ArrowLeft, Search, Users, Globe, Building2, BookOpen, Wrench, Phone, Mail, MapPin, Star, Clock, ExternalLink, Download, MessageCircle, ChevronRight, Navigation, Filter, Heart, ThumbsUp, Send, FileText, ChevronDown, User } from 'lucide-react'
 
 interface MoreScreenProps {
   user: { ppmkId: string; name: string; isAdmin?: boolean }
@@ -102,6 +102,14 @@ interface MaterialCategory {
   id: string
   name: string
   count: number
+}
+
+interface PPMKLeader {
+  id: string
+  name: string
+  position: string
+  phone?: string
+  email?: string
 }
 
 const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
@@ -220,6 +228,45 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
           ]
         }
       ]
+    }
+  ]
+
+  // PPMK Leadership data
+  const ppmkLeadership: PPMKLeader[] = [
+    {
+      id: '1',
+      name: 'ALI BIN ABU',
+      position: 'PRESIDENT',
+      phone: '+82-10-1234-5678',
+      email: 'president@ppmk.org'
+    },
+    {
+      id: '2',
+      name: 'ALIA BINTI ABU',
+      position: 'VICE PRESIDENT I',
+      phone: '+82-10-2345-6789',
+      email: 'vp1@ppmk.org'
+    },
+    {
+      id: '3',
+      name: 'ABU BIN ALI',
+      position: 'VICE PRESIDENT II',
+      phone: '+82-10-3456-7890',
+      email: 'vp2@ppmk.org'
+    },
+    {
+      id: '4',
+      name: 'ALEA BINTI ABU',
+      position: 'GENERAL SECRETARY',
+      phone: '+82-10-4567-8901',
+      email: 'secretary@ppmk.org'
+    },
+    {
+      id: '5',
+      name: 'ALYA BINTI ABU',
+      position: 'HONORARY TREASURER',
+      phone: '+82-10-5678-9012',
+      email: 'treasurer@ppmk.org'
     }
   ]
 
@@ -1021,6 +1068,135 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
     </div>
   )
 
+  const renderPPMKLeadership = () => (
+    <div className="min-h-screen bg-white">
+      <div className="absolute top-6 left-6 z-20">
+        <button 
+          onClick={() => setSelectedOrgCategory(null)}
+          className="w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200"
+        >
+          <ArrowLeft className="w-6 h-6 text-gray-700" />
+        </button>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        {/* Header */}
+        <div className="mb-16">
+          <h1 className="text-4xl font-bold text-black mb-2">
+            Organizations &raquo; Persatuan Pelajar Malaysia di Korea (PPMK)
+          </h1>
+          <div className="w-full h-px bg-black mt-8"></div>
+        </div>
+
+        {/* Leadership Grid */}
+        <div className="grid grid-cols-2 gap-6">
+          {/* President - Full width at top */}
+          <div className="col-span-2 flex justify-center mb-6">
+            <div className="bg-gray-300 rounded-lg p-8 w-96">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold text-black mb-4">PRESIDENT</h2>
+                <h3 className="text-xl font-medium text-black mb-6">{ppmkLeadership[0].name}</h3>
+                <div className="flex justify-center space-x-6">
+                  <button className="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <User className="w-6 h-6 text-white" />
+                  </button>
+                  <button className="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <Phone className="w-6 h-6 text-white" />
+                  </button>
+                  <button className="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <MessageCircle className="w-6 h-6 text-white" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Vice Presidents */}
+          <div className="bg-gray-300 rounded-lg p-6">
+            <div className="text-center">
+              <h2 className="text-lg font-bold text-black mb-3">VICE PRESIDENT I</h2>
+              <h3 className="text-base font-medium text-black mb-4">{ppmkLeadership[1].name}</h3>
+              <div className="flex justify-center space-x-4">
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <User className="w-5 h-5 text-white" />
+                </button>
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <Phone className="w-5 h-5 text-white" />
+                </button>
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <MessageCircle className="w-5 h-5 text-white" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gray-300 rounded-lg p-6">
+            <div className="text-center">
+              <h2 className="text-lg font-bold text-black mb-3">VICE PRESIDENT II</h2>
+              <h3 className="text-base font-medium text-black mb-4">{ppmkLeadership[2].name}</h3>
+              <div className="flex justify-center space-x-4">
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <User className="w-5 h-5 text-white" />
+                </button>
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <Phone className="w-5 h-5 text-white" />
+                </button>
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <MessageCircle className="w-5 h-5 text-white" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Secretary and Treasurer */}
+          <div className="bg-gray-300 rounded-lg p-6">
+            <div className="text-center">
+              <h2 className="text-lg font-bold text-black mb-3">GENERAL SECRETARY</h2>
+              <h3 className="text-base font-medium text-black mb-4">{ppmkLeadership[3].name}</h3>
+              <div className="flex justify-center space-x-4">
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <User className="w-5 h-5 text-white" />
+                </button>
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <Phone className="w-5 h-5 text-white" />
+                </button>
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <MessageCircle className="w-5 h-5 text-white" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gray-300 rounded-lg p-6">
+            <div className="text-center">
+              <h2 className="text-lg font-bold text-black mb-3">HONORARY TREASURER</h2>
+              <h3 className="text-base font-medium text-black mb-4">{ppmkLeadership[4].name}</h3>
+              <div className="flex justify-center space-x-4">
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <User className="w-5 h-5 text-white" />
+                </button>
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <Phone className="w-5 h-5 text-white" />
+                </button>
+                <button className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                  <MessageCircle className="w-5 h-5 text-white" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Empty placeholder cards */}
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+          <div className="bg-gray-300 rounded-lg p-6 h-32"></div>
+        </div>
+      </div>
+    </div>
+  )
+
   const renderOrganizationDetail = (category: OrganizationCategory) => (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="space-y-6">
@@ -1079,6 +1255,10 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
   )
 
   const renderOrganizations = () => {
+    if (selectedOrgCategory === 'ppmk') {
+      return renderPPMKLeadership()
+    }
+
     if (selectedOrgCategory) {
       const category = organizationCategories.find(cat => cat.id === selectedOrgCategory)
       if (category) {
@@ -1306,20 +1486,22 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
     }
   }
 
-  // Special case for helpdesk and study materials - render without the standard header/background
-  if (activeTab === 'helpdesk' || activeTab === 'materials') {
+  // Special case for helpdesk, study materials, and PPMK leadership - render without the standard header/background
+  if (activeTab === 'helpdesk' || activeTab === 'materials' || selectedOrgCategory === 'ppmk') {
     return (
       <div className="min-h-screen bg-white">
-        {/* Simple back button */}
-        <div className="absolute top-6 left-6 z-20">
-          <button 
-            onClick={handleBack}
-            className="w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200"
-          >
-            <ArrowLeft className="w-6 h-6 text-gray-700" />
-          </button>
-        </div>
-        {activeTab === 'helpdesk' ? renderHelpdesk() : renderStudyMaterials()}
+        {/* Simple back button - only show if not already handled by PPMK component */}
+        {selectedOrgCategory !== 'ppmk' && (
+          <div className="absolute top-6 left-6 z-20">
+            <button 
+              onClick={handleBack}
+              className="w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200"
+            >
+              <ArrowLeft className="w-6 h-6 text-gray-700" />
+            </button>
+          </div>
+        )}
+        {activeTab === 'helpdesk' ? renderHelpdesk() : activeTab === 'materials' ? renderStudyMaterials() : renderContent()}
       </div>
     )
   }
