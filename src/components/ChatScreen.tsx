@@ -185,19 +185,14 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ user, onBack, onSelectRoom }) =
       <div className="w-full max-w-2xl">
         {/* Header */}
         <div className="bg-white rounded-t-3xl px-8 py-6 border-b border-gray-100">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <button 
-                onClick={onBack}
-                className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5 text-gray-600" />
-              </button>
-              <h1 className="text-2xl font-bold text-gray-900">Chat</h1>
-            </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
-              <Users className="w-5 h-5 text-white" />
-            </div>
+          <div className="flex items-center space-x-4 mb-6">
+            <button 
+              onClick={onBack}
+              className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 text-gray-600" />
+            </button>
+            <h1 className="text-2xl font-bold text-gray-900">Chat</h1>
           </div>
           
           {/* Search Bar */}
@@ -214,7 +209,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ user, onBack, onSelectRoom }) =
         </div>
 
         {/* Chat Rooms List */}
-        <div className="bg-white max-h-96 overflow-y-auto">
+        <div className="bg-white max-h-96 overflow-y-auto rounded-b-3xl">
           {filteredChatRooms.length === 0 ? (
             <div className="px-8 py-12 text-center">
               <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -260,12 +255,12 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ user, onBack, onSelectRoom }) =
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(room.type)}`}>
                             {room.type.charAt(0).toUpperCase() + room.type.slice(1)}
                           </span>
-                          <span className="text-xs text-gray-500">
-                            {room.memberCount} members
+                          <span className="text-xs text-gray-500 flex items-center">
+                            <Users className="w-3 h-3 mr-1" />
+                            {room.memberCount}
                           </span>
                         </div>
-                        
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-400">
                           {room.lastMessageTime}
                         </span>
                       </div>
@@ -275,25 +270,6 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ user, onBack, onSelectRoom }) =
               ))}
             </div>
           )}
-        </div>
-
-        {/* Footer */}
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-b-3xl px-8 py-6 border-t border-gray-100">
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 text-xs text-gray-500 mb-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span>
-                {filteredChatRooms.length} chat room{filteredChatRooms.length !== 1 ? 's' : ''} available
-              </span>
-            </div>
-            <div className="flex items-center justify-center space-x-4 text-xs text-gray-600">
-              <span>Clubs: {user.clubs?.length || 0}</span>
-              <span>•</span>
-              <span>Events: {user.events?.length || 0}</span>
-              <span>•</span>
-              <span>Batch: {user.batch}</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>

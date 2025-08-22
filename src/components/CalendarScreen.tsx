@@ -182,26 +182,17 @@ const CalendarScreen: React.FC<CalendarScreenProps> = ({ user, onBack }) => {
         {/* Header */}
         <div className="backdrop-blur-xl bg-white/10 border-b border-white/20 px-4 py-6">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-4">
-                <button 
-                  onClick={onBack}
-                  className="w-10 h-10 backdrop-blur-xl bg-white/20 border border-white/30 rounded-xl flex items-center justify-center hover:bg-white/30 transition-all duration-300"
-                >
-                  <ArrowLeft className="w-5 h-5 text-gray-700" />
-                </button>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-800">PPMK Calendar</h1>
-                  <p className="text-gray-600">Track all PPMK events and activities</p>
-                </div>
+            <div className="flex items-center space-x-4 mb-6">
+              <button 
+                onClick={onBack}
+                className="w-10 h-10 backdrop-blur-xl bg-white/20 border border-white/30 rounded-xl flex items-center justify-center hover:bg-white/30 transition-all duration-300"
+              >
+                <ArrowLeft className="w-5 h-5 text-gray-700" />
+              </button>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-800">PPMK Calendar</h1>
+                <p className="text-gray-600">Track all PPMK events and activities</p>
               </div>
-              
-              {user.isAdmin && (
-                <button className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-300 flex items-center space-x-2">
-                  <Plus className="w-4 h-4" />
-                  <span>Add Event</span>
-                </button>
-              )}
             </div>
 
             {/* Search and Filters */}

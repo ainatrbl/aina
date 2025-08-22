@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ArrowLeft, Search, Users, Globe, Building2, BookOpen, Wrench, Phone, Mail, MapPin, Star, Clock, ExternalLink, Download, MessageCircle, ChevronRight, Navigation, Filter, Heart, ThumbsUp, Send, FileText } from 'lucide-react'
+import { ArrowLeft, Search, Users, Globe, Building2, BookOpen, Wrench, Phone, Mail, MapPin, Star, Clock, ExternalLink, Download, MessageCircle, ChevronRight, Navigation, Filter, Heart, ThumbsUp, Send, FileText, ChevronDown } from 'lucide-react'
 
 interface MoreScreenProps {
   user: { ppmkId: string; name: string; isAdmin?: boolean }
@@ -86,6 +86,24 @@ interface HelpTicket {
   date: string
 }
 
+interface University {
+  id: string
+  name: string
+  departments: Department[]
+}
+
+interface Department {
+  id: string
+  name: string
+  categories: MaterialCategory[]
+}
+
+interface MaterialCategory {
+  id: string
+  name: string
+  count: number
+}
+
 const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
   const [activeTab, setActiveTab] = useState('main')
   const [searchQuery, setSearchQuery] = useState('')
@@ -93,6 +111,117 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
   const [selectedOrgCategory, setSelectedOrgCategory] = useState<string | null>(null)
   const [mapView, setMapView] = useState(true)
   const [filterDistrict, setFilterDistrict] = useState('all')
+  const [selectedUniversity, setSelectedUniversity] = useState<University | null>(null)
+  const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null)
+
+  // Mock data for universities and departments
+  const universities: University[] = [
+    {
+      id: 'hanyang',
+      name: 'Hanyang University',
+      departments: [
+        {
+          id: 'cs',
+          name: 'Computer Science',
+          categories: [
+            { id: 'past-papers', name: 'Past Papers', count: 45 },
+            { id: 'quiz', name: 'Quiz', count: 23 },
+            { id: 'revision', name: 'Revision', count: 31 }
+          ]
+        },
+        {
+          id: 'engineering',
+          name: 'Engineering',
+          categories: [
+            { id: 'past-papers', name: 'Past Papers', count: 38 },
+            { id: 'quiz', name: 'Quiz', count: 19 },
+            { id: 'revision', name: 'Revision', count: 27 }
+          ]
+        },
+        {
+          id: 'business',
+          name: 'Business Administration',
+          categories: [
+            { id: 'past-papers', name: 'Past Papers', count: 29 },
+            { id: 'quiz', name: 'Quiz', count: 15 },
+            { id: 'revision', name: 'Revision', count: 22 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'snu',
+      name: 'Seoul National University',
+      departments: [
+        {
+          id: 'cs',
+          name: 'Computer Science',
+          categories: [
+            { id: 'past-papers', name: 'Past Papers', count: 52 },
+            { id: 'quiz', name: 'Quiz', count: 28 },
+            { id: 'revision', name: 'Revision', count: 35 }
+          ]
+        },
+        {
+          id: 'medicine',
+          name: 'Medicine',
+          categories: [
+            { id: 'past-papers', name: 'Past Papers', count: 41 },
+            { id: 'quiz', name: 'Quiz', count: 33 },
+            { id: 'revision', name: 'Revision', count: 29 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'yonsei',
+      name: 'Yonsei University',
+      departments: [
+        {
+          id: 'economics',
+          name: 'Economics',
+          categories: [
+            { id: 'past-papers', name: 'Past Papers', count: 36 },
+            { id: 'quiz', name: 'Quiz', count: 21 },
+            { id: 'revision', name: 'Revision', count: 25 }
+          ]
+        },
+        {
+          id: 'international',
+          name: 'International Studies',
+          categories: [
+            { id: 'past-papers', name: 'Past Papers', count: 24 },
+            { id: 'quiz', name: 'Quiz', count: 18 },
+            { id: 'revision', name: 'Revision', count: 20 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'kaist',
+      name: 'KAIST',
+      departments: [
+        {
+          id: 'engineering',
+          name: 'Engineering',
+          categories: [
+            { id: 'past-papers', name: 'Past Papers', count: 47 },
+            { id: 'quiz', name: 'Quiz', count: 26 },
+            { id: 'revision', name: 'Revision', count: 33 }
+          ]
+        },
+        {
+          id: 'science',
+          name: 'Natural Sciences',
+          categories: [
+            { id: 'past-papers', name: 'Past Papers', count: 39 },
+            { id: 'quiz', name: 'Quiz', count: 22 },
+            { id: 'revision', name: 'Revision', count: 28 }
+          ]
+        }
+      ]
+    }
+  ]
 
   // Mock data
   const contacts: Contact[] = [
@@ -984,42 +1113,105 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
     )
   }
 
-  const renderStudyMaterials = () => (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="space-y-4">
-        {studyMaterials.map((material) => (
-          <div key={material.id} className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-gray-800 mb-1">{material.title}</h3>
-                <p className="text-blue-600 font-medium mb-2">{material.subject}</p>
-                <p className="text-gray-600 mb-3">{material.university}</p>
-                <div className="flex items-center space-x-4 text-sm text-gray-600">
-                  <span>By {material.uploadedBy}</span>
-                  <span>{material.downloads} downloads</span>
-                  <span>{new Date(material.date).toLocaleDateString()}</span>
-                </div>
+  const renderStudyMaterialsMain = () => (
+    <div className="min-h-screen bg-white">
+      <div className="max-w-4xl mx-auto px-6 py-8">
+        <div className="space-y-6">
+          {universities.map((university) => (
+            <button
+              key={university.id}
+              onClick={() => setSelectedUniversity(university)}
+              className="w-full text-left p-6 hover:bg-gray-50 rounded-2xl transition-colors duration-200 group border border-gray-200"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-medium text-black group-hover:text-gray-700">
+                  {university.name}
+                </h2>
+                <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-gray-600" />
               </div>
-              <div className="flex flex-col items-end space-y-2">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  material.type === 'pdf' ? 'bg-red-100 text-red-600' :
-                  material.type === 'video' ? 'bg-blue-100 text-blue-600' :
-                  material.type === 'notes' ? 'bg-green-100 text-green-600' :
-                  'bg-purple-100 text-purple-600'
-                }`}>
-                  {material.type.toUpperCase()}
-                </span>
-                <button className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300">
-                  <Download className="w-4 h-4" />
-                  <span>Download</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+              <p className="text-gray-600 mt-2">
+                {university.departments.length} departments available
+              </p>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
+
+  const renderUniversityDepartments = () => {
+    if (!selectedUniversity) return null
+
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          <div className="space-y-6">
+            {selectedUniversity.departments.map((department) => (
+              <button
+                key={department.id}
+                onClick={() => setSelectedDepartment(department)}
+                className="w-full text-left p-6 hover:bg-gray-50 rounded-2xl transition-colors duration-200 group border border-gray-200"
+              >
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-medium text-black group-hover:text-gray-700">
+                    {department.name}
+                  </h2>
+                  <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-gray-600" />
+                </div>
+                <p className="text-gray-600 mt-2">
+                  {department.categories.reduce((total, cat) => total + cat.count, 0)} materials available
+                </p>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const renderDepartmentCategories = () => {
+    if (!selectedDepartment || !selectedUniversity) return null
+
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="max-w-4xl mx-auto px-6 py-12">
+          {/* Header with breadcrumb */}
+          <div className="mb-16">
+            <h1 className="text-4xl font-bold text-black mb-2">
+              {selectedUniversity.name.toUpperCase()} &raquo; {selectedDepartment.name.toUpperCase()}
+            </h1>
+            <div className="w-full h-px bg-black mt-8"></div>
+          </div>
+
+          {/* Categories */}
+          <div className="space-y-8">
+            {selectedDepartment.categories.map((category) => (
+              <button
+                key={category.id}
+                className="w-full bg-gray-300 hover:bg-gray-400 transition-colors duration-200 rounded-lg"
+              >
+                <div className="py-16 px-8">
+                  <h2 className="text-4xl font-bold text-black text-center">
+                    {category.name.toUpperCase()}
+                  </h2>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const renderStudyMaterials = () => {
+    if (selectedDepartment) {
+      return renderDepartmentCategories()
+    }
+    if (selectedUniversity) {
+      return renderUniversityDepartments()
+    }
+    return renderStudyMaterialsMain()
+  }
 
   const renderHelpdesk = () => (
     <div className="min-h-screen bg-white">
@@ -1066,6 +1258,12 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
   )
 
   const getTabTitle = () => {
+    if (selectedDepartment && selectedUniversity) {
+      return `${selectedUniversity.name} - ${selectedDepartment.name}`
+    }
+    if (selectedUniversity) {
+      return selectedUniversity.name
+    }
     if (selectedOrgCategory) {
       const category = organizationCategories.find(cat => cat.id === selectedOrgCategory)
       return category ? category.title : 'Organizations'
@@ -1093,7 +1291,11 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
   }
 
   const handleBack = () => {
-    if (selectedRestaurant) {
+    if (selectedDepartment) {
+      setSelectedDepartment(null)
+    } else if (selectedUniversity) {
+      setSelectedUniversity(null)
+    } else if (selectedRestaurant) {
       setSelectedRestaurant(null)
     } else if (selectedOrgCategory) {
       setSelectedOrgCategory(null)
@@ -1104,11 +1306,11 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
     }
   }
 
-  // Special case for helpdesk - render without the standard header/background
-  if (activeTab === 'helpdesk') {
+  // Special case for helpdesk and study materials - render without the standard header/background
+  if (activeTab === 'helpdesk' || activeTab === 'materials') {
     return (
       <div className="min-h-screen bg-white">
-        {/* Simple back button for helpdesk */}
+        {/* Simple back button */}
         <div className="absolute top-6 left-6 z-20">
           <button 
             onClick={handleBack}
@@ -1117,7 +1319,7 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
             <ArrowLeft className="w-6 h-6 text-gray-700" />
           </button>
         </div>
-        {renderHelpdesk()}
+        {activeTab === 'helpdesk' ? renderHelpdesk() : renderStudyMaterials()}
       </div>
     )
   }
@@ -1156,7 +1358,7 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
             </div>
 
             {/* Search Bar - only show on detail screens */}
-            {activeTab !== 'main' && !selectedRestaurant && !selectedOrgCategory && (
+            {activeTab !== 'main' && !selectedRestaurant && !selectedOrgCategory && !selectedUniversity && !selectedDepartment && (
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <input

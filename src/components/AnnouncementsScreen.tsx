@@ -168,13 +168,8 @@ const AnnouncementsScreen: React.FC<AnnouncementsScreenProps> = ({ user, onBack 
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-t-3xl px-8 py-6 border-b border-gray-100">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-gray-900">Announcements</h1>
-            </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
-              <Users className="w-5 h-5 text-white" />
-            </div>
+          <div className="flex items-center mb-6">
+            <h1 className="text-2xl font-bold text-gray-900">Announcements</h1>
           </div>
           
           {/* Search Bar */}
