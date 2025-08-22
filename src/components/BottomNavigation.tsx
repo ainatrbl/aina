@@ -1,5 +1,5 @@
 import React from 'react'
-import { Home, Bell, MessageCircle, Users, Calendar, MoreHorizontal } from 'lucide-react'
+import { Bell, MessageCircle, Users, Calendar, MoreHorizontal } from 'lucide-react'
 
 interface BottomNavigationProps {
   activeSection: string
@@ -21,13 +21,6 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   onShowMore
 }) => {
   const navItems = [
-    { 
-      id: 'home', 
-      label: 'Home', 
-      icon: Home, 
-      onClick: () => setActiveSection('home'),
-      hasNotification: false
-    },
     { 
       id: 'announcements', 
       label: 'Announcements', 
@@ -78,7 +71,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
                 <button
                   key={item.id}
                   onClick={item.onClick}
-                  className={`relative flex flex-col items-center space-y-1 px-2 py-2 rounded-xl transition-all duration-300 ${
+                  className={`relative flex flex-col items-center space-y-1 px-3 py-2 rounded-xl transition-all duration-300 ${
                     isActive
                       ? 'bg-white/20 text-blue-600 shadow-lg'
                       : 'text-gray-600 hover:bg-white/10 hover:text-gray-800'

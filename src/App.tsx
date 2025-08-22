@@ -9,9 +9,6 @@ import ChannelDetailScreen from './components/ChannelDetailScreen'
 import CalendarScreen from './components/CalendarScreen'
 import MoreScreen from './components/MoreScreen'
 import Header from './components/Header'
-import Hero from './components/Hero'
-import Features from './components/Features'
-import Community from './components/Community'
 import BottomNavigation from './components/BottomNavigation'
 
 export interface User {
@@ -28,14 +25,14 @@ export interface User {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
-  const [showAnnouncements, setShowAnnouncements] = useState(false)
+  const [showAnnouncements, setShowAnnouncements] = useState(true) // Default to true after login
   const [showChat, setShowChat] = useState(false)
   const [showChannel, setShowChannel] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
   const [showMore, setShowMore] = useState(false)
   const [selectedChatRoom, setSelectedChatRoom] = useState<string | null>(null)
   const [selectedChannel, setSelectedChannel] = useState<string | null>(null)
-  const [activeSection, setActiveSection] = useState('home')
+  const [activeSection, setActiveSection] = useState('announcements') // Default to announcements
   const [user, setUser] = useState<User | null>(null)
 
   const handleLogin = (ppmkId: string, name: string, scholarship?: string, university?: string) => {
@@ -54,13 +51,14 @@ function App() {
     setUser(enhancedUser)
     setIsAuthenticated(true)
     setShowProfile(false)
-    setShowAnnouncements(false)
+    setShowAnnouncements(true) // Automatically show announcements
     setShowChat(false)
     setShowChannel(false)
     setShowCalendar(false)
     setShowMore(false)
     setSelectedChatRoom(null)
     setSelectedChannel(null)
+    setActiveSection('announcements') // Set announcements as active
   }
 
   // Mock functions to determine user memberships based on PPMK ID
@@ -187,31 +185,37 @@ function App() {
 
   const handleBackFromProfile = () => {
     setShowProfile(false)
+    setShowAnnouncements(true)
+    setActiveSection('announcements')
   }
 
   const handleBackFromAnnouncements = () => {
-    setShowAnnouncements(false)
-    setActiveSection('home')
+    setShowAnnouncements(true) // Stay on announcements since there's no home
+    setActiveSection('announcements')
   }
 
   const handleBackFromChat = () => {
     setShowChat(false)
-    setActiveSection('home')
+    setShowAnnouncements(true)
+    setActiveSection('announcements')
   }
 
   const handleBackFromChannel = () => {
     setShowChannel(false)
-    setActiveSection('home')
+    setShowAnnouncements(true)
+    setActiveSection('announcements')
   }
 
   const handleBackFromCalendar = () => {
     setShowCalendar(false)
-    setActiveSection('home')
+    setShowAnnouncements(true)
+    setActiveSection('announcements')
   }
 
   const handleBackFromMore = () => {
     setShowMore(false)
-    setActiveSection('home')
+    setShowAnnouncements(true)
+    setActiveSection('announcements')
   }
 
   const handleBackFromChatRoom = () => {
@@ -237,7 +241,7 @@ function App() {
     setShowMore(false)
     setSelectedChatRoom(null)
     setSelectedChannel(null)
-    setActiveSection('home')
+    setActiveSection('announcements')
   }
 
   // Show login screen if not authenticated
@@ -248,11 +252,6 @@ function App() {
   // Show profile screen if user clicked on profile
   if (showProfile && user) {
     return <ProfileScreen user={user} onBack={handleBackFromProfile} />
-  }
-
-  // Show announcements screen if user clicked on announcements
-  if (showAnnouncements && user) {
-    return <AnnouncementsScreen user={user} onBack={handleBackFromAnnouncements} />
   }
 
   // Show calendar screen if user clicked on calendar
@@ -285,41 +284,43 @@ function App() {
     return <ChatScreen user={user} onBack={handleBackFromChat} onSelectRoom={handleSelectChatRoom} />
   }
 
-  // Show main app after login
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 font-inter pb-20">
-      {/* Background Pattern */}
-      <div className="fixed inset-0 opacity-30">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-cyan-400/20 to-teal-400/20"></div>
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-300/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-300/30 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-300/20 rounded-full blur-3xl"></div>
-      </div>
+  // Default to announcements screen (no home page)
+  if (user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 font-inter pb-20">
+        {/* Background Pattern */}
+        <div className="fixed inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-cyan-400/20 to-teal-400/20"></div>
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-300/30 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-300/30 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-300/20 rounded-full blur-3xl"></div>
+        </div>
 
-      {/* Content */}
-      <div className="relative z-10">
-        <Header 
-          user={user}
-          onLogout={handleLogout}
-          onShowProfile={handleShowProfile}
-        />
-        
-        <Hero />
-        <Features />
-        <Community />
-        
-        <BottomNavigation 
-          activeSection={activeSection}
-          setActiveSection={setActiveSection}
-          onShowAnnouncements={handleShowAnnouncements}
-          onShowChat={handleShowChat}
-          onShowChannel={handleShowChannel}
-          onShowCalendar={handleShowCalendar}
-          onShowMore={handleShowMore}
-        />
+        {/* Content */}
+        <div className="relative z-10">
+          <Header 
+            user={user}
+            onLogout={handleLogout}
+            onShowProfile={handleShowProfile}
+          />
+          
+          <AnnouncementsScreen user={user} onBack={handleBackFromAnnouncements} />
+          
+          <BottomNavigation 
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+            onShowAnnouncements={handleShowAnnouncements}
+            onShowChat={handleShowChat}
+            onShowChannel={handleShowChannel}
+            onShowCalendar={handleShowCalendar}
+            onShowMore={handleShowMore}
+          />
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  return null
 }
 
 export default App

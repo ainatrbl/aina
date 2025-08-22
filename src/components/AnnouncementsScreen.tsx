@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { Users, Search, Bell, MessageCircle, GraduationCap, Calendar, ArrowLeft, Megaphone, Clock, Eye, Heart, MessageSquare, MoreHorizontal } from 'lucide-react'
+import { Users, Search, Bell, MessageCircle, GraduationCap, Calendar, Megaphone, Clock, Eye, Heart, MessageSquare, MoreHorizontal } from 'lucide-react'
 
 interface AnnouncementsScreenProps {
   user: { ppmkId: string; name: string; scholarship?: string; university?: string }
@@ -164,18 +164,12 @@ const AnnouncementsScreen: React.FC<AnnouncementsScreenProps> = ({ user, onBack 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 font-inter flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
+    <div className="pt-20 pb-4 px-4">
+      <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-t-3xl px-8 py-6 border-b border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
-              <button 
-                onClick={onBack}
-                className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5 text-gray-600" />
-              </button>
               <h1 className="text-2xl font-bold text-gray-900">Announcements</h1>
             </div>
             <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
