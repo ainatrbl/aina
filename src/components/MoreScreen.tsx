@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ArrowLeft, Search, Users, Globe, Building2, BookOpen, Wrench, Phone, Mail, MapPin, Star, Clock, ExternalLink, Download, MessageCircle, ChevronRight, Navigation, Filter, Heart, ThumbsUp } from 'lucide-react'
+import { ArrowLeft, Search, Users, Globe, Building2, BookOpen, Wrench, Phone, Mail, MapPin, Star, Clock, ExternalLink, Download, MessageCircle, ChevronRight, Navigation, Filter, Heart, ThumbsUp, Send, FileText } from 'lucide-react'
 
 interface MoreScreenProps {
   user: { ppmkId: string; name: string; isAdmin?: boolean }
@@ -1022,43 +1022,45 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
   )
 
   const renderHelpdesk = () => (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <button className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-300 flex items-center space-x-2">
-          <MessageCircle className="w-4 h-4" />
-          <span>Submit New Ticket</span>
-        </button>
-      </div>
-      
-      <div className="space-y-4">
-        <h3 className="text-xl font-bold text-gray-800 mb-4">Recent Tickets</h3>
-        {helpTickets.map((ticket) => (
-          <div key={ticket.id} className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h4 className="text-lg font-bold text-gray-800 mb-2">{ticket.title}</h4>
-                <p className="text-blue-600 font-medium mb-2">{ticket.category}</p>
-                <p className="text-sm text-gray-600">{new Date(ticket.date).toLocaleDateString()}</p>
-              </div>
-              <div className="flex flex-col items-end space-y-2">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  ticket.status === 'resolved' ? 'bg-green-100 text-green-600' :
-                  ticket.status === 'in-progress' ? 'bg-yellow-100 text-yellow-600' :
-                  'bg-red-100 text-red-600'
-                }`}>
-                  {ticket.status.replace('-', ' ').toUpperCase()}
-                </span>
-                <span className={`px-2 py-1 rounded text-xs ${
-                  ticket.priority === 'high' ? 'bg-red-500 text-white' :
-                  ticket.priority === 'medium' ? 'bg-yellow-500 text-white' :
-                  'bg-gray-500 text-white'
-                }`}>
-                  {ticket.priority.toUpperCase()}
-                </span>
-              </div>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        {/* Header */}
+        <div className="mb-16">
+          <h1 className="text-4xl font-bold text-black mb-2">Helpdesk</h1>
+        </div>
+
+        {/* Help Options */}
+        <div className="space-y-8">
+          {/* FAQs (Chatbot) */}
+          <button className="w-full flex items-center space-x-6 p-6 hover:bg-gray-50 rounded-2xl transition-colors duration-200 group">
+            <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+              <MessageCircle className="w-8 h-8 text-white" />
             </div>
-          </div>
-        ))}
+            <div className="text-left">
+              <h2 className="text-2xl font-medium text-black group-hover:text-gray-700">FAQs (Chatbot)</h2>
+            </div>
+          </button>
+
+          {/* Live Chat */}
+          <button className="w-full flex items-center space-x-6 p-6 hover:bg-gray-50 rounded-2xl transition-colors duration-200 group">
+            <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+              <Send className="w-8 h-8 text-white" />
+            </div>
+            <div className="text-left">
+              <h2 className="text-2xl font-medium text-black group-hover:text-gray-700">Live chat with PPMK team (07:00 - 16:30)</h2>
+            </div>
+          </button>
+
+          {/* Complaints */}
+          <button className="w-full flex items-center space-x-6 p-6 hover:bg-gray-50 rounded-2xl transition-colors duration-200 group">
+            <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+              <FileText className="w-8 h-8 text-white" />
+            </div>
+            <div className="text-left">
+              <h2 className="text-2xl font-medium text-black group-hover:text-gray-700">Complaints</h2>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -1100,6 +1102,24 @@ const MoreScreen: React.FC<MoreScreenProps> = ({ user, onBack }) => {
     } else {
       onBack()
     }
+  }
+
+  // Special case for helpdesk - render without the standard header/background
+  if (activeTab === 'helpdesk') {
+    return (
+      <div className="min-h-screen bg-white">
+        {/* Simple back button for helpdesk */}
+        <div className="absolute top-6 left-6 z-20">
+          <button 
+            onClick={handleBack}
+            className="w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200"
+          >
+            <ArrowLeft className="w-6 h-6 text-gray-700" />
+          </button>
+        </div>
+        {renderHelpdesk()}
+      </div>
+    )
   }
 
   return (
