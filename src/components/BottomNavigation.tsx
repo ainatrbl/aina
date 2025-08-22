@@ -1,5 +1,5 @@
 import React from 'react'
-import { Bell, MessageCircle, Users, Calendar, MoreHorizontal } from 'lucide-react'
+import { MessageCircle, Users, Calendar, MoreHorizontal, Megaphone } from 'lucide-react'
 
 interface BottomNavigationProps {
   activeSection: string
@@ -13,7 +13,6 @@ interface BottomNavigationProps {
 
 const BottomNavigation: React.FC<BottomNavigationProps> = ({
   activeSection,
-  setActiveSection,
   onShowAnnouncements,
   onShowChat,
   onShowChannel,
@@ -21,78 +20,64 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   onShowMore
 }) => {
   const navItems = [
-    { 
-      id: 'announcements', 
-      label: 'Announcements', 
-      icon: Bell, 
-      onClick: onShowAnnouncements,
-      hasNotification: true
+    {
+      id: 'announcements',
+      icon: Megaphone,
+      label: 'Announcements',
+      onClick: onShowAnnouncements
     },
-    { 
-      id: 'calendar', 
-      label: 'Calendar', 
-      icon: Calendar, 
-      onClick: onShowCalendar,
-      hasNotification: false
+    {
+      id: 'chat',
+      icon: MessageCircle,
+      label: 'Chat',
+      onClick: onShowChat
     },
-    { 
-      id: 'channel', 
-      label: 'Channel', 
-      icon: Users, 
-      onClick: onShowChannel,
-      hasNotification: false
+    {
+      id: 'channel',
+      icon: Users,
+      label: 'Channels',
+      onClick: onShowChannel
     },
-    { 
-      id: 'chat', 
-      label: 'Chat', 
-      icon: MessageCircle, 
-      onClick: onShowChat,
-      hasNotification: true
+    {
+      id: 'calendar',
+      icon: Calendar,
+      label: 'Calendar',
+      onClick: onShowCalendar
     },
-    { 
-      id: 'more', 
-      label: 'More', 
-      icon: MoreHorizontal, 
-      onClick: onShowMore,
-      hasNotification: false
+    {
+      id: 'more',
+      icon: MoreHorizontal,
+      label: 'More',
+      onClick: onShowMore
     }
   ]
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4">
-      <div className="max-w-lg mx-auto">
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl px-2 py-4 shadow-xl">
-          <div className="flex items-center justify-around">
-            {navItems.map((item) => {
-              const Icon = item.icon
-              const isActive = activeSection === item.id
-              
-              return (
-                <button
-                  key={item.id}
-                  onClick={item.onClick}
-                  className={`relative flex flex-col items-center space-y-1 px-3 py-2 rounded-xl transition-all duration-300 ${
-                    isActive
-                      ? 'bg-white/20 text-blue-600 shadow-lg'
-                      : 'text-gray-600 hover:bg-white/10 hover:text-gray-800'
-                  }`}
-                >
-                  <div className="relative">
-                    <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : ''}`} />
-                    {item.hasNotification && (
-                      <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
-                    )}
-                  </div>
-                  <span className={`text-xs font-medium ${isActive ? 'text-blue-600' : ''}`}>
-                    {item.label}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-200/50 px-4 py-2 z-50">
+      <div className="flex justify-around items-center">
+        {navItems.map((item) => {
+          const Icon = item.icon
+          const isActive = activeSection === item.id
+          
+          return (
+            <button
+              key={item.id}
+              onClick={item.onClick}
+              className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-all ${
+                isActive 
+                  ? 'text-blue-600 bg-blue-50' 
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-500'}`} />
+              <span className={`text-xs font-medium ${isActive ? 'text-blue-600' : 'text-gray-500'}`}>
+                {item.label}
+              </span>
+            </button>
+          )
+        })}
       </div>
-    </div>
+    </nav>
   )
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Users, User, ArrowLeft, Send, Smile, Paperclip, MoreVertical, Phone, Video, Search, Crown, Trophy, GraduationCap, Zap, BookOpen, Coffee } from 'lucide-react'
+import { ArrowLeft, Send, Smile, Paperclip, MoreVertical } from 'lucide-react'
 import { User as UserType } from '../App'
 
 interface ChatRoomScreenProps {
@@ -10,11 +10,9 @@ interface ChatRoomScreenProps {
 
 interface Message {
   id: string
-  senderId: string
-  senderName: string
+  sender: string
   content: string
   timestamp: string
-  type: 'text' | 'image' | 'file'
   isOwn: boolean
 }
 
@@ -23,175 +21,66 @@ const ChatRoomScreen: React.FC<ChatRoomScreenProps> = ({ user, roomId, onBack })
   const [messages, setMessages] = useState<Message[]>([])
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Get room details based on roomId
-  const getRoomDetails = (roomId: string) => {
-    if (roomId === 'ppmk-official') {
-      return {
-        name: 'PPMK Official Group',
-        memberCount: 245,
-        description: 'Official announcements and community updates',
-        icon: Crown,
-        color: 'text-purple-600'
-      }
-    }
-    
-    if (roomId.includes('club-badminton')) {
-      return {
-        name: 'Badminton Club',
-        memberCount: 42,
-        description: 'Connect with fellow Badminton Club members',
-        icon: Trophy,
-        color: 'text-blue-600'
-      }
-    }
-    
-    if (roomId.includes('club-recreational')) {
-      return {
-        name: 'Recreational Club',
-        memberCount: 38,
-        description: 'Connect with fellow Recreational Club members',
-        icon: Trophy,
-        color: 'text-blue-600'
-      }
-    }
-    
-    if (roomId.includes('university-yonsei')) {
-      return {
-        name: 'Yonsei Students',
-        memberCount: 67,
-        description: 'Connect with Malaysian students at Yonsei',
-        icon: GraduationCap,
-        color: 'text-green-600'
-      }
-    }
-    
-    if (roomId.includes('batch-2024')) {
-      return {
-        name: 'Batch 2024',
-        memberCount: 34,
-        description: 'Connect with your batch mates from 2024',
-        icon: Users,
-        color: 'text-orange-600'
-      }
-    }
-    
-    if (roomId.includes('hackathon')) {
-      return {
-        name: 'Hackathon: Hacktopus',
-        memberCount: 28,
-        description: 'Coordinate and discuss Hackathon: Hacktopus',
-        icon: Zap,
-        color: 'text-red-600'
-      }
-    }
-    
-    if (roomId === 'korean-language') {
-      return {
-        name: 'Korean Language Exchange',
-        memberCount: 78,
-        description: 'Practice Korean with fellow students',
-        icon: BookOpen,
-        color: 'text-gray-600'
-      }
-    }
-    
-    if (roomId === 'casual-chat') {
-      return {
-        name: 'Casual Hangout',
-        memberCount: 156,
-        description: 'Casual conversations and daily life',
-        icon: Coffee,
-        color: 'text-gray-600'
-      }
-    }
-    
-    return {
-      name: 'Chat Room',
-      memberCount: 0,
-      description: 'Group chat',
-      icon: Users,
-      color: 'text-gray-600'
-    }
+  // Mock room data
+  const roomData = {
+    '1': { name: 'General Discussion', participants: 45 },
+    '2': { name: 'Batch 2024', participants: 28 },
+    '3': { name: 'Badminton Club', participants: 12 },
+    '4': { name: 'Study Group - CS', participants: 8 },
+    '5': { name: 'Hackathon Team Alpha', participants: 4 },
+    '6': { name: 'Academic Committee', participants: 6 }
   }
 
-  const roomDetails = getRoomDetails(roomId)
-  const IconComponent = roomDetails.icon
+  const currentRoom = roomData[roomId as keyof typeof roomData] || { name: 'Unknown Room', participants: 0 }
 
-  // Mock messages based on room type
+  // Mock messages
   useEffect(() => {
-    const generateMockMessages = (): Message[] => {
-      const baseMessages: Message[] = []
-      
-      if (roomId === 'ppmk-official') {
-        baseMessages.push(
-          {
-            id: '1',
-            senderId: 'admin',
-            senderName: 'PPMK Admin',
-            content: 'Welcome to the official PPMK community chat! Please keep discussions respectful and relevant.',
-            timestamp: '2 hours ago',
-            type: 'text',
-            isOwn: false
-          },
-          {
-            id: '2',
-            senderId: 'user1',
-            senderName: 'Ahmad Zaki',
-            content: 'Thanks for setting this up! Great to connect with everyone.',
-            timestamp: '1 hour ago',
-            type: 'text',
-            isOwn: false
-          }
-        )
-      } else if (roomId.includes('badminton')) {
-        baseMessages.push(
-          {
-            id: '1',
-            senderId: 'user2',
-            senderName: 'Siti Nurhaliza',
-            content: 'Anyone up for a game this weekend? The weather looks perfect!',
-            timestamp: '1 hour ago',
-            type: 'text',
-            isOwn: false
-          },
-          {
-            id: '2',
-            senderId: 'user3',
-            senderName: 'Rahman Ali',
-            content: 'Count me in! What time are we thinking?',
-            timestamp: '45 minutes ago',
-            type: 'text',
-            isOwn: false
-          }
-        )
-      } else if (roomId.includes('hackathon')) {
-        baseMessages.push(
-          {
-            id: '1',
-            senderId: 'user4',
-            senderName: 'Tech Lead',
-            content: 'Team formation starts tomorrow! Make sure to register on the portal.',
-            timestamp: '30 minutes ago',
-            type: 'text',
-            isOwn: false
-          },
-          {
-            id: '2',
-            senderId: 'user5',
-            senderName: 'Sarah Kim',
-            content: 'Looking for frontend developers to join our team! DM me if interested.',
-            timestamp: '15 minutes ago',
-            type: 'text',
-            isOwn: false
-          }
-        )
+    const mockMessages: Message[] = [
+      {
+        id: '1',
+        sender: 'Ahmad Rahman',
+        content: 'Hey everyone! How was the workshop today?',
+        timestamp: '10:30 AM',
+        isOwn: false
+      },
+      {
+        id: '2',
+        sender: user.name,
+        content: 'It was really informative! Learned a lot about React hooks.',
+        timestamp: '10:32 AM',
+        isOwn: true
+      },
+      {
+        id: '3',
+        sender: 'Sarah Lee',
+        content: 'Same here! The instructor was really good at explaining complex concepts.',
+        timestamp: '10:35 AM',
+        isOwn: false
+      },
+      {
+        id: '4',
+        sender: 'Mike Johnson',
+        content: 'Did anyone take notes? I missed the part about useEffect cleanup.',
+        timestamp: '10:38 AM',
+        isOwn: false
+      },
+      {
+        id: '5',
+        sender: user.name,
+        content: 'I can share my notes! Let me upload them to the shared drive.',
+        timestamp: '10:40 AM',
+        isOwn: true
+      },
+      {
+        id: '6',
+        sender: 'Ahmad Rahman',
+        content: 'That would be great! Thanks for sharing.',
+        timestamp: '10:42 AM',
+        isOwn: false
       }
-      
-      return baseMessages
-    }
-
-    setMessages(generateMockMessages())
-  }, [roomId])
+    ]
+    setMessages(mockMessages)
+  }, [roomId, user.name])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -201,158 +90,113 @@ const ChatRoomScreen: React.FC<ChatRoomScreenProps> = ({ user, roomId, onBack })
     scrollToBottom()
   }, [messages])
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault()
     if (message.trim()) {
       const newMessage: Message = {
         id: Date.now().toString(),
-        senderId: user.ppmkId,
-        senderName: user.name,
-        content: message,
-        timestamp: 'now',
-        type: 'text',
+        sender: user.name,
+        content: message.trim(),
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         isOwn: true
       }
-      
       setMessages(prev => [...prev, newMessage])
       setMessage('')
     }
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 font-inter flex">
-      {/* Left Sidebar */}
-      <div className="hidden lg:flex flex-col w-20 bg-white border-r border-gray-200 items-center py-8 space-y-8">
-        {/* Logo */}
-        <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
-          <Users className="w-6 h-6 text-white" />
-        </div>
-        
-        {/* Navigation Icons */}
-        <div className="flex flex-col space-y-6">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-            <User className="w-6 h-6 text-gray-600" />
-          </div>
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-            <Search className="w-6 h-6 text-gray-600" />
-          </div>
-          <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center cursor-pointer hover:bg-purple-200 transition-colors">
-            <IconComponent className={`w-6 h-6 ${roomDetails.color}`} />
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 flex flex-col">
+      {/* Background Pattern */}
+      <div className="fixed inset-0 opacity-30">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-cyan-400/20 to-teal-400/20"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-300/30 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-300/30 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Chat Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="relative z-10 flex flex-col h-screen">
+        {/* Header */}
+        <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 px-4 py-3 sticky top-0 z-50">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button 
+            <div className="flex items-center space-x-3">
+              <button
                 onClick={onBack}
-                className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors lg:hidden"
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-600" />
               </button>
-              
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
-                  <IconComponent className={`w-6 h-6 ${roomDetails.color}`} />
-                </div>
-                <div>
-                  <h1 className="text-lg font-semibold text-gray-900">{roomDetails.name}</h1>
-                  <p className="text-sm text-gray-500">{roomDetails.memberCount} members</p>
-                </div>
+              <div>
+                <h1 className="text-lg font-semibold text-gray-900">{currentRoom.name}</h1>
+                <p className="text-xs text-gray-500">{currentRoom.participants} members</p>
               </div>
             </div>
-            
-            <div className="flex items-center space-x-2">
-              <button className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors">
-                <Phone className="w-5 h-5 text-gray-600" />
-              </button>
-              <button className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors">
-                <Video className="w-5 h-5 text-gray-600" />
-              </button>
-              <button className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors">
-                <MoreVertical className="w-5 h-5 text-gray-600" />
-              </button>
-            </div>
+            <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
+              <MoreVertical className="w-5 h-5 text-gray-600" />
+            </button>
           </div>
-        </div>
+        </header>
 
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          {messages.length === 0 ? (
-            <div className="text-center py-12">
-              <IconComponent className={`w-16 h-16 ${roomDetails.color} mx-auto mb-4 opacity-50`} />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Welcome to {roomDetails.name}</h3>
-              <p className="text-gray-500 max-w-md mx-auto">{roomDetails.description}</p>
-            </div>
-          ) : (
-            messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}
-              >
-                <div className={`max-w-xs lg:max-w-md ${msg.isOwn ? 'order-2' : 'order-1'}`}>
-                  {!msg.isOwn && (
-                    <p className="text-xs text-gray-500 mb-1 px-3">{msg.senderName}</p>
-                  )}
-                  <div
-                    className={`px-4 py-3 rounded-2xl ${
-                      msg.isOwn
-                        ? 'bg-blue-500 text-white rounded-br-md'
-                        : 'bg-white border border-gray-200 text-gray-900 rounded-bl-md'
-                    }`}
-                  >
-                    <p className="text-sm">{msg.content}</p>
-                  </div>
-                  <p className={`text-xs text-gray-500 mt-1 px-3 ${msg.isOwn ? 'text-right' : 'text-left'}`}>
-                    {msg.timestamp}
-                  </p>
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}
+            >
+              <div className={`max-w-xs lg:max-w-md ${msg.isOwn ? 'order-2' : 'order-1'}`}>
+                {!msg.isOwn && (
+                  <p className="text-xs text-gray-500 mb-1 px-3">{msg.sender}</p>
+                )}
+                <div
+                  className={`px-4 py-2 rounded-2xl ${
+                    msg.isOwn
+                      ? 'bg-blue-500 text-white rounded-br-md'
+                      : 'bg-white/80 backdrop-blur-md text-gray-900 rounded-bl-md border border-white/20'
+                  }`}
+                >
+                  <p className="text-sm">{msg.content}</p>
                 </div>
+                <p className={`text-xs text-gray-500 mt-1 px-3 ${msg.isOwn ? 'text-right' : 'text-left'}`}>
+                  {msg.timestamp}
+                </p>
               </div>
-            ))
-          )}
+            </div>
+          ))}
           <div ref={messagesEndRef} />
         </div>
 
         {/* Message Input */}
-        <div className="bg-white border-t border-gray-200 p-4">
-          <div className="flex items-center space-x-4">
-            <button className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors">
+        <div className="bg-white/80 backdrop-blur-md border-t border-gray-200/50 p-4">
+          <form onSubmit={handleSendMessage} className="flex items-center space-x-3">
+            <button
+              type="button"
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            >
               <Paperclip className="w-5 h-5 text-gray-600" />
             </button>
-            
             <div className="flex-1 relative">
               <input
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
                 placeholder="Type a message..."
-                className="w-full px-4 py-3 bg-gray-100 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                className="w-full px-4 py-3 pr-12 bg-gray-100 rounded-full focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
               />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 transition-colors"
+              >
+                <Smile className="w-5 h-5 text-gray-600" />
+              </button>
             </div>
-            
-            <button className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors">
-              <Smile className="w-5 h-5 text-gray-600" />
-            </button>
-            
             <button
-              onClick={handleSendMessage}
+              type="submit"
               disabled={!message.trim()}
-              className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              <Send className="w-5 h-5 text-white" />
+              <Send className="w-5 h-5" />
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
